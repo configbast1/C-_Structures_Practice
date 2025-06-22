@@ -1,0 +1,134 @@
+#include <iostream>
+#include <Windows.h>
+using namespace std;
+
+struct Entity {
+    float speed;
+    int type; 
+    char color[20];
+
+    union {
+        float flightSpeed; 
+        bool isHoofed;     
+        int iq;           
+    } characteristic;
+};
+
+const char* getTypeName(int type) {
+    switch (type) {
+    case 0: return "Птах";
+    case 1: return "Худоба";
+    case 2: return "Людина";
+    default: return "Невідомо";
+    }
+}
+
+void inputEntity(Entity& e) {
+    cout << "\nВведите скорость передвижения (м/с): ";
+    cin >> e.speed;
+
+    cout << "Тип (0 – Птах, 1 – Худоба, 2 – Людина): ";
+    cin >> e.type;
+    cin.ignore();
+
+    cout << "Цвет: ";
+    cin.getline(e.color, 20);
+
+    if (e.type == 0) {
+        cout << "Введите скорость полета (м/с): ";
+        cin >> e.characteristic.flightSpeed;
+    }
+    else if (e.type == 1) {
+        int hoofed;
+        cout << "Парнокопытная (1 – да, 0 – нет): ";
+        cin >> hoofed;
+        e.characteristic.isHoofed = hoofed;
+    }
+    else if (e.type == 2) {
+        cout << "Введите уровень IQ: ";
+        cin >> e.characteristic.iq;
+    }
+
+    cin.ignore();
+}
+
+void printEntity(const Entity& e) {
+    cout << "\n--- Живая сущность ---\n";
+    cout << "Тип: " << getTypeName(e.type) << endl;
+    cout << "Цвет: " << e.color << endl;
+    cout << "Скорость передвижения: " << e.speed << " м/с" << endl;
+
+    if (e.type == 0) {
+        cout << "Скорость полета: " << e.characteristic.flightSpeed << " м/с" << endl;
+    }
+    else if (e.type == 1) {
+        cout << "Парнокопытная: " << (e.characteristic.isHoofed ? "Да" : "Нет") << endl;
+    }
+    else if (e.type == 2) {
+        cout << "IQ: " << e.characteristic.iq << endl;
+    }
+}
+
+void editEntity(Entity& e) {
+    cout << "\nРедактирование сущности:\n";
+    inputEntity(e);
+}
+
+void printAllEntities(Entity arr[], int size) {
+    for (int i = 0; i < size; i++) {
+        printEntity(arr[i]);
+    }
+}
+
+void searchByCharacteristic(Entity arr[], int size) {
+    int type;
+    cout << "\nВведите тип (0 – Птах, 1 – Худоба, 2 – Людина): ";
+    cin >> type;
+
+    if (type == 0) {
+        float targetSpeed;
+        cout << "Введите искомую скорость полета: ";
+        cin >> targetSpeed;
+        for (int i = 0; i < size; i++) {
+            if (arr[i].type == 0 && arr[i].characteristic.flightSpeed == targetSpeed)
+                printEntity(arr[i]);
+        }
+    }
+    else if (type == 1) {
+        int isHoofed;
+        cout << "Ищем парнокопытных (1 – да, 0 – нет): ";
+        cin >> isHoofed;
+        for (int i = 0; i < size; i++) {
+            if (arr[i].type == 1 && arr[i].characteristic.isHoofed == isHoofed)
+                printEntity(arr[i]);
+        }
+    }
+    else if (type == 2) {
+        int targetIQ;
+        cout << "Введите искомый уровень IQ: ";
+        cin >> targetIQ;
+        for (int i = 0; i < size; i++) {
+            if (arr[i].type == 2 && arr[i].characteristic.iq == targetIQ)
+                printEntity(arr[i]);
+        }
+    }
+}
+
+int main() {
+    SetConsoleOutputCP(1251);
+    SetConsoleCP(1251);
+
+    const int SIZE = 3;
+    Entity entities[SIZE];
+
+    for (int i = 0; i < SIZE; i++) {
+        cout << "\nСущность #" << i + 1 << ":\n";
+        inputEntity(entities[i]);
+    }
+
+    printAllEntities(entities, SIZE);
+
+    searchByCharacteristic(entities, SIZE);
+
+    return 0;
+}
