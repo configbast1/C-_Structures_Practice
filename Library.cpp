@@ -1,6 +1,7 @@
 #include <iostream>
 #include <Windows.h>
-using namespace std;
+using namespace std; 
+//3 задание
 
 struct Book {
     char title[50];
