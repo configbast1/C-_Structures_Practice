@@ -1,6 +1,8 @@
 #include <iostream>
 #include <Windows.h>
 using namespace std;
+//4 задание
+
 
 struct Entity {
     float speed;
