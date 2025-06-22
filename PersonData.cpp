@@ -1,6 +1,8 @@
 #include <iostream>
 #include <Windows.h>
 using namespace std;
+//6 задание 
+
 
 struct Date {
     int day;
